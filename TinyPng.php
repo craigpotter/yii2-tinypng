@@ -118,4 +118,37 @@ class TinyPng extends Component
         $resized = $source->resize($options);
         $resized->toFile($dst);
     }
+
+    /**
+     * Preseve the specified image's metadata with compression.
+     *
+     * @param string $src the image source path.
+     * @param string $dst the image destination path after being optimized. If not set $src
+     * will be overwritten.
+     * @param array $options option used to preserve metadata. options array must be formatted like so:
+     * ~~~php
+     * [
+     *     'copyright',
+     *     'creation',
+     *     'location'
+     * ]
+     * ~~~
+     *
+     * Available options are:
+     *     - copyright
+     *     - creation (JPEG only)
+     *     - location (JPEG only)
+     *
+     * See [TinyPng docs](https://tinypng.com/developers/reference/php#preserving-metadata) for information about each method.
+     */
+    public function preserve($src, $dst, $options)
+    {
+        if(!empty($preserve) && is_array($preserve))
+        {
+            $dst = $dst ?: $src;
+            $source = Tinify\fromFile($src);
+            $source->preserve($preserve); 
+            $source->toFile($dst);
+        }  
+    }
 }
